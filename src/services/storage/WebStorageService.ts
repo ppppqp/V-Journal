@@ -1,3 +1,4 @@
+import { generateId } from '@/src/utils/random';
 import { StorageService, StorageServiceOptions } from './StorageService';
 import { DiaryEntry } from '@/src/types/diary';
 
@@ -19,11 +20,11 @@ export class WebStorageService extends StorageService {
 
   async createDiary(): Promise<DiaryEntry> {
     const newDiary: DiaryEntry = {
-      id: Math.random().toString(36).substring(2, 15),
+      id: generateId(),
       date: new Date().toISOString(),
       tags: [],
       conversation: {
-        id: Math.random().toString(36).substring(2, 15),
+        id: generateId(),
         date: new Date().toISOString(),
         messages: [],
       },

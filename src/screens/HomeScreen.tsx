@@ -34,14 +34,31 @@ const mockMessages: ConversationMessage[] = [
 ];
 
 export default function HomeScreen() {
-  const currentQuestion = useStore((state) => state.currentQuestion);
   const speechText = useStore((state) => state.speechText);
   const isRecording = useStore((state) => state.isRecording);
   const currentDiary = useStore((state) => state.currentDiary);
   const setCurrentDiary = useStore((state) => state.setCurrentDiary);
   const createNewDiary = useStore((state) => state.createNewDiary);
+  const loadDiaries = useStore((state) => state.loadDiaries);
 
+  useEffect(() => {
+    const checkForTodaysDiary = async () => {
+      await loadDiaries();
+      const diaries = useStore.getState().diaries;
+      const today = new Date();
+      const todaysDiary = diaries.find(diary => {
+        const diaryDate = new Date(diary.date);
+        return diaryDate.toDateString() === today.toDateString();
+      });
+      if (!todaysDiary) {
+        await createNewDiary();
+      } else {
+        setCurrentDiary(todaysDiary);
+      }
+    };
 
+    checkForTodaysDiary();
+  }, [createNewDiary, setCurrentDiary]);
 
   const handleNewDiary = useCallback(() => {
     createNewDiary();
@@ -49,7 +66,7 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.title}>{currentQuestion}</Text>
+      <Text style={styles.title}>How was your day overall?</Text>
       
       <ThemedView style={styles.transcriptContainer}>
         {currentDiary?.conversation?.messages.map((message) => (

@@ -3,12 +3,11 @@ import { WebSpeechProcess } from '../services/speech/WebSpeechProcess';
 import { WebStorageService } from '../services/storage/WebStorageService';
 import { ConversationMessage } from '../types/conversation';
 import { DiaryEntry } from '../types/diary';
+import { generateId } from '../utils/random';
 
 interface AppState {
   isRecording: boolean;
   setIsRecording: (value: boolean) => void;
-  currentQuestion: string;
-  setCurrentQuestion: (question: string) => void;
   speechText: string;
   setSpeechText: (text: string) => void;
   currentDiary: DiaryEntry | null;
@@ -26,18 +25,6 @@ interface AppState {
 export const useStore = create<AppState>((set, get) => ({
   isRecording: false,
   setIsRecording: (value) => set({ isRecording: value }),
-  currentQuestion: 'How was your day overall?',
-  setCurrentQuestion: (question) => {
-    set({ currentQuestion: question });
-    // Add assistant message when question changes
-    const state = get();
-    if (state.currentDiary) {
-      state.addMessage({
-        type: 'assistant',
-        content: question,
-      });
-    }
-  },
   speechText: '',
   setSpeechText: (text) => set({ speechText: text }),
   currentDiary: null,
@@ -49,7 +36,7 @@ export const useStore = create<AppState>((set, get) => ({
 
     const newMessage: ConversationMessage = {
       ...message,
-      id: Math.random().toString(36).substring(7),
+      id: generateId(),
       timestamp: Date.now(),
     };
 
@@ -75,10 +62,9 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   createNewDiary: async () => {
-    const { storageService, setCurrentDiary, setCurrentQuestion } = get();
+    const { storageService, setCurrentDiary } = get();
     const newDiary = await storageService.createDiary();
     setCurrentDiary(newDiary);
-    setCurrentQuestion('How was your day overall?');
   },
 
   saveDiary: async () => {

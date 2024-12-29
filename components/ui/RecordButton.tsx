@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { useStore } from '@/src/store/useStore';
+import { generateId } from '@/src/utils/random';
 
 export default function RecordButton() {
   const isRecording = useStore((state) => state.isRecording);
@@ -8,7 +9,10 @@ export default function RecordButton() {
   const setSpeechText = useStore((state) => state.setSpeechText);
   const speechProcess = useStore((state) => state.speechProcess);
   const addMessage = useStore((state) => state.addMessage);
-  
+  const saveDiary = useStore((state) => state.saveDiary);
+  const currentDiary = useStore((state) => state.currentDiary);
+  const speechText = useStore((state) => state.speechText);
+
   const colorAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -50,6 +54,15 @@ export default function RecordButton() {
     } else {
       speechProcess.stopListening();
       setIsRecording(false);
+      if(speechText){
+        currentDiary?.conversation.messages.push({
+          id: generateId(),
+          timestamp: Date.now(),
+          type: 'user',
+          content: speechText,
+        });
+      }
+      saveDiary();
     }
   };
 
