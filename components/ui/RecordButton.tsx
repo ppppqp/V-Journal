@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
-import { useStore } from '@/src/store/useStore';
-import { generateId } from '@/src/utils/random';
+import { useStore } from '@/store/useStore';
+import { generateId } from '@/utils/random';
 
 export default function RecordButton() {
   const isRecording = useStore((state) => state.isRecording);

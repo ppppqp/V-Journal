@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { useStore } from '@/src/store/useStore';
+import { useStore } from '@/store/useStore';
 import { format } from 'date-fns';
-import { DiaryEntry } from '@/src/types/diary';
+import { DiaryEntry } from '@/types/diary';
 
 export default function DiaryListScreen() {
   const diaries = useStore((state) => state.diaries);

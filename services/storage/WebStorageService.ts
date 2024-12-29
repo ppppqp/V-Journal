@@ -1,6 +1,6 @@
-import { generateId } from '@/src/utils/random';
+import { generateId } from '@/utils/random';
 import { StorageService, StorageServiceOptions } from './StorageService';
-import { DiaryEntry } from '@/src/types/diary';
+import { DiaryEntry } from '@/types/diary';
 
 export class WebStorageService extends StorageService {
   private namespace: string;

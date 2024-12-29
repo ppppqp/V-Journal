@@ -1,4 +1,4 @@
-import { DiaryEntry } from '@/src/types/diary';
+import { DiaryEntry } from '@/types/diary';
 
 export interface StorageServiceOptions {
   namespace?: string;

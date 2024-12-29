@@ -1,4 +1,4 @@
-import DiaryListScreen from '@/src/screens/DiaryListScreen';
+import DiaryListScreen from '@/screens/DiaryListScreen';
 
 
 export default function DiaryListPage() {

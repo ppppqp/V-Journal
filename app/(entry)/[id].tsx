@@ -2,7 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
 import { Text, StyleSheet, ScrollView } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
-import { useStore } from '@/src/store/useStore';
+import { useStore } from '@/store/useStore';
 import { format } from 'date-fns';
 
 export default function ViewEntryScreen() {

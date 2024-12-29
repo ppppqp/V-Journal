@@ -2,8 +2,8 @@ import React, { useCallback, useEffect } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import RecordButton from '@/components/ui/RecordButton';
-import { useStore } from '@/src/store/useStore';
-import { ConversationMessage } from '@/src/types/conversation';
+import { useStore } from '@/store/useStore';
+import { ConversationMessage } from '@/types/conversation';
 import NewButton from '@/components/ui/NewButton';
 
 const mockMessages: ConversationMessage[] = [

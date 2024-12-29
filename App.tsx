@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { RootStackParamList } from './src/types/navigation';
-import HomeScreen from './src/screens/HomeScreen';
-import NewEntryScreen from './src/screens/NewEntryScreen';
-import DiaryListScreen from './src/screens/DiaryListScreen';
-import ViewEntryScreen from './src/screens/ViewEntryScreen';
+import { RootStackParamList } from './types/navigation';
+import HomeScreen from './screens/HomeScreen';
+import NewEntryScreen from './screens/NewEntryScreen';
+import DiaryListScreen from './screens/DiaryListScreen';
+import ViewEntryScreen from './screens/ViewEntryScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
