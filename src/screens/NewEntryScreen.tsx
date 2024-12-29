@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/navigation';
-
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import RecordButton from '@/components/ui/RecordButton';
+import { ThemedView } from '@/components/ThemedView';
+import { useStore } from '@/src/store/useStore';
 
 export default function NewEntryScreen() {
-  const [isRecording, setIsRecording] = useState(false);
+  const currentQuestion = useStore((state) => state.currentQuestion);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>New Diary Entry</Text>
-      <TouchableOpacity 
-        style={[styles.recordButton, isRecording && styles.recording]}
-        onPress={() => setIsRecording(!isRecording)}
-      >
-        <Text style={styles.buttonText}>
-          {isRecording ? 'Stop Recording' : 'Start Recording'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <ThemedView style={styles.container}>
+      <Text style={styles.title}>{currentQuestion}</Text>
+      <RecordButton />
+    </ThemedView>
   );
 }
 
@@ -29,23 +22,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: 500,
     marginBottom: 30,
-  },
-  recordButton: {
-    backgroundColor: '#007AFF',
-    padding: 20,
-    borderRadius: 50,
-    width: 200,
-    alignItems: 'center',
-  },
-  recording: {
-    backgroundColor: '#FF3B30',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '600',
   },
 }); 

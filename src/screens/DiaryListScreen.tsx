@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { DiaryEntry } from '../types/diary';
+import { ThemedView } from '@/components/ThemedView';
 
 export default function DiaryListScreen() {
   const [entries, setEntries] = React.useState<DiaryEntry[]>([]);
@@ -17,29 +18,31 @@ export default function DiaryListScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <FlatList
         data={entries}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
       />
-    </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   listContainer: {
-    padding: 16,
+    flexGrow: 1,
   },
   entryCard: {
     backgroundColor: 'white',
-    padding: 16,
+    padding: 12,
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

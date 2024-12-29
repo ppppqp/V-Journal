@@ -1,26 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/navigation';
-import { router } from 'expo-router';
+import { ThemedView } from '@/components/ThemedView';
+import RecordButton from '@/components/ui/RecordButton';
+
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Voice Diary</Text>
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => router.push('/new-entry')}
-      >
-        <Text style={styles.buttonText}>New Entry</Text>
-      </TouchableOpacity>
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => router.push('/diary')}
-      >
-        <Text style={styles.buttonText}>View Entries</Text>
-      </TouchableOpacity>
-    </View>
+    <ThemedView style={styles.container}>
+      <Text style={styles.title}>How was your day overall?</Text>
+      <ThemedView style={styles.recordButtonContainer}>
+      <RecordButton />
+
+      </ThemedView>
+    </ThemedView>
   );
 }
 
@@ -28,20 +20,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   title: {
-    fontSize: 32,
+    paddingTop: 80,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 40,
+  },
+  recordButtonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 100,
   },
   button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
+    backgroundColor: '#111',
+    padding: 12,
     borderRadius: 10,
-    width: '80%',
-    marginVertical: 10,
+    width: '50%',
+    marginVertical: 8,
   },
   buttonText: {
     color: 'white',

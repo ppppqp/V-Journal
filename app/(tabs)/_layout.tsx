@@ -1,21 +1,42 @@
 import { Tabs } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
+import { Feather  } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{
+      headerShown: true,
+      tabBarStyle: { backgroundColor: '#fafafa' },
+    }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <FontAwesome name="home" size={24} color={color} />,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Feather  name="home" size={18} color={color} />,
+          tabBarActiveTintColor: 'black',
+          tabBarLabel: '',
+          tabBarLabelStyle: {
+            display: 'none',
+          },
         }}
       />
       <Tabs.Screen
         name="diary"
         options={{
-          title: 'Entries',
-          tabBarIcon: ({ color }) => <FontAwesome name="book" size={24} color={color} />,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Feather  name="book" size={18} color={color} />,
+          tabBarActiveTintColor: 'black',
+          tabBarLabel: '',
+          tabBarLabelStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="new-entry"
+        options={{
+          title: 'New',
+          headerTitle: 'New',
+          href: null,
         }}
       />
     </Tabs>
