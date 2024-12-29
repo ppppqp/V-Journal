@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import RecordButton from '@/components/ui/RecordButton';
 
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   recordButtonContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     paddingBottom: 100,
   },
