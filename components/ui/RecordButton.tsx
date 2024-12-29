@@ -5,6 +5,9 @@ import { useStore } from '@/src/store/useStore';
 export default function RecordButton() {
   const isRecording = useStore((state) => state.isRecording);
   const setIsRecording = useStore((state) => state.setIsRecording);
+  const setSpeechText = useStore((state) => state.setSpeechText);
+  const speechProcess = useStore((state) => state.speechProcess);
+  
   const colorAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -20,6 +23,23 @@ export default function RecordButton() {
     outputRange: ['#ee1010', '#111'],
   });
 
+  const handlePress = async () => {
+    if (!isRecording) {
+      setIsRecording(true);
+      try {
+        const result = await speechProcess.speechToText({ language: 'zh-CN' });
+        setSpeechText(result.text);
+      } catch (error) {
+        console.error('Speech recognition error:', error);
+      } finally {
+        setIsRecording(false);
+      }
+    } else {
+      speechProcess.stopListening();
+      setIsRecording(false);
+    }
+  };
+
   return (
     <Animated.View style={[
       styles.recordButton,
@@ -27,11 +47,10 @@ export default function RecordButton() {
       {
         backgroundColor,
       },
-
     ]}>
       <TouchableOpacity
         style={styles.touchable}
-        onPress={() => setIsRecording(!isRecording)}
+        onPress={handlePress}
       />
     </Animated.View>
   );

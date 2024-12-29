@@ -13,10 +13,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({ color }) => <Feather  name="home" size={18} color={color} />,
           tabBarActiveTintColor: 'black',
-          tabBarLabel: '',
-          tabBarLabelStyle: {
-            display: 'none',
-          },
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
@@ -25,10 +22,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({ color }) => <Feather  name="book" size={18} color={color} />,
           tabBarActiveTintColor: 'black',
-          tabBarLabel: '',
-          tabBarLabelStyle: {
-            display: 'none',
-          },
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
