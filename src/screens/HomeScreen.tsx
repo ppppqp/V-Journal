@@ -1,30 +1,76 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import RecordButton from '@/components/ui/RecordButton';
 import { useStore } from '@/src/store/useStore';
+import { ConversationMessage } from '@/src/types/conversation';
+import NewButton from '@/components/ui/NewButton';
 
+const mockMessages: ConversationMessage[] = [
+  {
+    id: '1',
+    timestamp: new Date().getTime(),
+    type: 'assistant',
+    content: 'How was your day overall?',
+  },
+  {
+    id: '2',
+    timestamp: new Date().getTime(),
+    type: 'user',
+    content: 'I had a great day!',
+  },
+  {
+    id: '3',
+    timestamp: new Date().getTime(),
+    type: 'assistant',
+    content: 'What did you do?',
+  },
+  {
+    id: '4',
+    timestamp: new Date().getTime(),
+    type: 'user',
+    content: 'I went to the gym and then had dinner with friends.',
+  },
+];
 
 export default function HomeScreen() {
   const currentQuestion = useStore((state) => state.currentQuestion);
   const speechText = useStore((state) => state.speechText);
   const isRecording = useStore((state) => state.isRecording);
+  const currentDiary = useStore((state) => state.currentDiary);
+  const setCurrentDiary = useStore((state) => state.setCurrentDiary);
+  const createNewDiary = useStore((state) => state.createNewDiary);
+
+
+
+  const handleNewDiary = useCallback(() => {
+    createNewDiary();
+  }, [createNewDiary]);
+
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.title}>How was your day overall?</Text>
+      <Text style={styles.title}>{currentQuestion}</Text>
       
       <ThemedView style={styles.transcriptContainer}>
-        {isRecording && (
-          <Text style={styles.recordingText}>Recording...</Text>
-        )}
-        {speechText && (
-          <Text style={styles.transcriptText}>{speechText}</Text>
+        {currentDiary?.conversation?.messages.map((message) => (
+          <Text key={message.id} style={[
+            styles.messageText,
+            message.type === 'assistant' ? styles.assistantMessage : styles.userMessage
+          ]}>
+            {message.content}
+          </Text>
+        ))}
+        {isRecording && speechText && (
+          <Text style={styles.recordingText}>{speechText}</Text>
         )}
       </ThemedView>
       
       <ThemedView style={styles.recordButtonContainer}>
-      <RecordButton />
-
+        <RecordButton />
+      </ThemedView>
+      
+      <ThemedView style={styles.newButtonContainer}>
+        <NewButton onPress={handleNewDiary} />
       </ThemedView>
     </ThemedView>
   );
@@ -63,10 +109,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   transcriptContainer: {
-    flex: 1,
+    flex: 2,
     width: '100%',
     padding: 16,
     marginBottom: 20,
+    overflowY: 'scroll',
   },
   recordingText: {
     color: '#ee1010',
@@ -74,9 +121,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
-  transcriptText: {
-    fontSize: 18,
-    lineHeight: 24,
-    color: '#333',
+  messageText: {
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  assistantMessage: {
+    color: '#666',
+    alignSelf: 'flex-start',
+  },
+  userMessage: {
+    color: '#111',
+    alignSelf: 'flex-end',
+  },
+  newButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '100%',
   },
 }); 

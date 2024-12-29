@@ -1,31 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { DiaryEntry } from '../types/diary';
-import { ThemedView } from '@/components/ThemedView';
+import { useStore } from '@/src/store/useStore';
+import { format } from 'date-fns';
+import { DiaryEntry } from '@/src/types/diary';
 
 export default function DiaryListScreen() {
-  const [entries, setEntries] = React.useState<DiaryEntry[]>([]);
+  const diaries = useStore((state) => state.diaries);
+  const loadDiaries = useStore((state) => state.loadDiaries);
+
+  useEffect(() => {
+    loadDiaries();
+  }, []);
 
   const renderItem = ({ item }: { item: DiaryEntry }) => (
     <TouchableOpacity 
-      style={styles.entryCard}
+      style={styles.diaryCard}
       onPress={() => router.push(`/(entry)/${item.id}`)}
     >
-      <Text style={styles.entryDate}>{item.date}</Text>
-      <Text style={styles.entrySummary}>{item.summary || 'No summary available'}</Text>
+      <Text style={styles.date}>
+        {format(new Date(item.date), 'MMM dd, yyyy')}
+      </Text>
+      {item.title && <Text style={styles.title}>{item.title}</Text>}
+      {item.summary && <Text style={styles.summary}>{item.summary}</Text>}
+      {item.tags.length > 0 && (
+        <View style={styles.tagContainer}>
+          {item.tags.map(tag => (
+            <Text key={tag} style={styles.tag}>#{tag}</Text>
+          ))}
+        </View>
+      )}
     </TouchableOpacity>
   );
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
-        data={entries}
+        data={diaries}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
       />
-    </ThemedView>
+    </View>
   );
 }
 
@@ -38,7 +54,7 @@ const styles = StyleSheet.create({
   listContainer: {
     flexGrow: 1,
   },
-  entryCard: {
+  diaryCard: {
     backgroundColor: 'white',
     padding: 12,
     borderRadius: 8,
@@ -49,13 +65,28 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  entryDate: {
+  date: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
   },
-  entrySummary: {
+  title: {
     fontSize: 14,
+    color: '#666',
+  },
+  summary: {
+    fontSize: 14,
+    color: '#666',
+  },
+  tagContainer: {
+    flexDirection: 'row',
+    marginTop: 8,
+  },
+  tag: {
+    backgroundColor: '#f0f0f0',
+    padding: 4,
+    borderRadius: 4,
+    marginRight: 8,
     color: '#666',
   },
 }); 

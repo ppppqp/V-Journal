@@ -9,9 +9,25 @@ export class WebSpeechProcess extends SpeechProcess {
     if (typeof window !== 'undefined') {
       this.synthesis = window.speechSynthesis;
       this.recognition = new window.webkitSpeechRecognition();
-      this.recognition.continuous = false;
-      this.recognition.interimResults = false;
+      this.recognition.continuous = true;
+      this.recognition.interimResults = true;
     }
+  }
+
+  startListening(options: SpeechProcessOptions = {}): void {
+    if (!this.recognition) throw new Error('Speech recognition not available');
+
+    this.recognition.lang = options.language || 'en-US';
+    this.recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const result = event.results[event.results.length - 1][0];
+      options.onResult?.({
+        text: result.transcript,
+        confidence: result.confidence,
+        isFinal: event.results[event.results.length - 1].isFinal,
+      });
+    };
+
+    this.recognition.start();
   }
 
   async textToSpeech(text: string, options: SpeechProcessOptions = {}): Promise<void> {
@@ -28,25 +44,6 @@ export class WebSpeechProcess extends SpeechProcess {
       utterance.onerror = (error: Event) => reject(error);
 
       this.synthesis?.speak(utterance);
-    });
-  }
-
-  async speechToText(options: SpeechProcessOptions = {}): Promise<SpeechToTextResult> {
-    if (!this.recognition) throw new Error('Speech recognition not available');
-
-    this.recognition.lang = options.language || 'en-US';
-
-    return new Promise((resolve, reject) => {
-      this.recognition!.onresult = (event: SpeechRecognitionEvent) => {
-        const result = event.results[0][0];
-        resolve({
-          text: result.transcript,
-          confidence: result.confidence,
-        });
-      };
-
-      this.recognition!.onerror = (error: Event) => reject(error);
-      this.recognition!.start();
     });
   }
 

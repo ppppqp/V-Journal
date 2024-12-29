@@ -1,13 +1,14 @@
+import { Conversation } from './conversation';
+
 export interface DiaryEntry {
   id: string;
   date: string;
-  content: {
-    question: string;
-    answer: string;
-  }[];
+  title?: string;
   summary?: string;
+  tags: string[];
   mood?: string;
-  tags?: string[];
+  conversation: Conversation;
+  lastModified: number;
 }
 
 export interface Question {
