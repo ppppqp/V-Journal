@@ -5,6 +5,8 @@ import RecordButton from '@/components/ui/RecordButton';
 import { useStore } from '@/store/useStore';
 import { ConversationMessage } from '@/types/conversation';
 import NewButton from '@/components/ui/NewButton';
+import { useCheckTodaysDiary } from '@/hooks/useCheckTodaysDiary';
+import { useRecord } from '@/hooks/useRecord';
 
 const mockMessages: ConversationMessage[] = [
   {
@@ -37,28 +39,10 @@ export default function HomeScreen() {
   const speechText = useStore((state) => state.speechText);
   const isRecording = useStore((state) => state.isRecording);
   const currentDiary = useStore((state) => state.currentDiary);
-  const setCurrentDiary = useStore((state) => state.setCurrentDiary);
   const createNewDiary = useStore((state) => state.createNewDiary);
-  const loadDiaries = useStore((state) => state.loadDiaries);
 
-  useEffect(() => {
-    const checkForTodaysDiary = async () => {
-      await loadDiaries();
-      const diaries = useStore.getState().diaries;
-      const today = new Date();
-      const todaysDiary = diaries.find(diary => {
-        const diaryDate = new Date(diary.date);
-        return diaryDate.toDateString() === today.toDateString();
-      });
-      if (!todaysDiary) {
-        await createNewDiary();
-      } else {
-        setCurrentDiary(todaysDiary);
-      }
-    };
-
-    checkForTodaysDiary();
-  }, [createNewDiary, setCurrentDiary]);
+  useCheckTodaysDiary();
+  const onRecord = useRecord();
 
   const handleNewDiary = useCallback(() => {
     createNewDiary();
@@ -83,7 +67,7 @@ export default function HomeScreen() {
       </ThemedView>
       
       <ThemedView style={styles.recordButtonContainer}>
-        <RecordButton />
+        <RecordButton onPress={onRecord} />
       </ThemedView>
       
       <ThemedView style={styles.newButtonContainer}>
