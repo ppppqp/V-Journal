@@ -6,7 +6,6 @@ import { useStore } from '@/store/useStore';
 import { ConversationMessage } from '@/types/conversation';
 import NewButton from '@/components/ui/NewButton';
 import { useCheckTodaysDiary } from '@/hooks/useCheckTodaysDiary';
-import { useRecord } from '@/hooks/useRecord';
 
 const mockMessages: ConversationMessage[] = [
   {
@@ -42,8 +41,6 @@ export default function HomeScreen() {
   const createNewDiary = useStore((state) => state.createNewDiary);
 
   useCheckTodaysDiary();
-  const onRecord = useRecord();
-
   const handleNewDiary = useCallback(() => {
     createNewDiary();
   }, [createNewDiary]);
@@ -67,7 +64,7 @@ export default function HomeScreen() {
       </ThemedView>
       
       <ThemedView style={styles.recordButtonContainer}>
-        <RecordButton onPress={onRecord} />
+        <RecordButton />
       </ThemedView>
       
       <ThemedView style={styles.newButtonContainer}>

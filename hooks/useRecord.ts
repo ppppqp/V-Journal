@@ -1,6 +1,5 @@
 import { useStore } from '@/store/useStore';
-import { generateId } from '@/utils/random';
-
+import { useLLMAgent } from '@/hooks/useLLMAgent';
 
 export const useRecord = () => {
   const speechProcess = useStore((state) => state.speechProcess);
@@ -8,26 +7,26 @@ export const useRecord = () => {
   const setSpeechText = useStore((state) => state.setSpeechText);
   const isRecording = useStore((state) => state.isRecording);
   const setIsRecording = useStore((state) => state.setIsRecording);
-  const currentDiary = useStore((state) => state.currentDiary);
   const saveDiary = useStore((state) => state.saveDiary);
   const speechText = useStore((state) => state.speechText);
+  const { generateNextQuestion } = useLLMAgent();
 
-  return () => {
+  return async () => {
     if (!isRecording) {
+      // start recording
       setIsRecording(true);
-      setSpeechText(''); // Clear previous speech text
+      setSpeechText('');
       try {
         speechProcess.startListening({
           language: 'zh-CN',
           onResult: (result) => {
             setSpeechText(result.text);
             if (result.isFinal) {
-              // Add the final speech text to conversation
               addMessage({
                 type: 'user',
                 content: result.text,
               });
-              setSpeechText(''); // Clear after adding to conversation
+              setSpeechText('');
             }
           },
         });
@@ -36,17 +35,20 @@ export const useRecord = () => {
         setIsRecording(false);
       }
     } else {
+      // stop recording
       speechProcess.stopListening();
       setIsRecording(false);
       if (speechText) {
-        currentDiary?.conversation.messages.push({
-          id: generateId(),
-          timestamp: Date.now(),
+        addMessage({
           type: 'user',
           content: speechText,
         });
+        setSpeechText('');
       }
-      saveDiary();
+      await saveDiary();
+
+      // Generate and speak the next question
+      await generateNextQuestion();
     }
   };
-};
+}; 
